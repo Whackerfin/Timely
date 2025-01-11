@@ -1,7 +1,11 @@
 import "package:flutter/material.dart";
-import "package:timely/themes.dart";
+import "package:timely/colors.dart";
+import "package:timely/widgets/add_actions_button.dart";
+import "package:timely/widgets/buttons_row.dart";
+import "package:timely/widgets/clear_button.dart";
+import "package:timely/widgets/footer.dart";
 import "package:timely/widgets/header.dart";
-import "package:timely/widgets/actions.dart";
+import "package:timely/widgets/actions_list.dart";
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,6 +15,7 @@ class HomeScreen extends StatelessWidget {
       final isDarkMode = Theme.of(context).brightness == Brightness.dark;
       return Container(
           width: MediaQuery.sizeOf(context).width,
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
           decoration: isDarkMode
               ? BoxDecoration(
                   gradient: LinearGradient(
@@ -24,7 +29,10 @@ class HomeScreen extends StatelessWidget {
               : null,
           child: Column(children: <Widget>[
             Header(),
-            ActionCard(name: "Breakfast", duration: "15mins")
+            ActionsList(),
+            ClearButton(),
+            AddActionsButton(),
+            Footer()
           ]));
     }));
   }
