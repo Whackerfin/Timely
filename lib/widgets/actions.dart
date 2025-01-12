@@ -13,28 +13,33 @@ class ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-    return SizedBox(
-        height: 100,
-        child: Card.outlined(
-            color: Theme.of(context).colorScheme.primary,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                side: BorderSide(
-                  color: isLight ? actionOutlineLight : actionOutlineDark,
-                )),
-            elevation: 1.0,
-            child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Row(children: [
-                  Container(
-                      margin: EdgeInsets.only(right: 12.0), child: Icon(icon)),
-                  Expanded(
-                      child: Text(name,
-                          style: Theme.of(context).textTheme.bodyMedium)),
-                  Container(
-                      alignment: Alignment.bottomRight,
-                      child: Text(duration,
-                          style: Theme.of(context).textTheme.titleSmall))
-                ]))));
+    return InkWell(
+        borderRadius: BorderRadius.circular(12.0),
+        highlightColor: isLight ? accentColorLight : accentColorDark,
+        onTap: () {},
+        child: SizedBox(
+            height: 100,
+            child: Card.outlined(
+                color: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    side: BorderSide(
+                      color: isLight ? actionOutlineLight : actionOutlineDark,
+                    )),
+                elevation: 1.0,
+                child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Row(children: [
+                      Container(
+                          margin: EdgeInsets.only(right: 12.0),
+                          child: Icon(icon)),
+                      Expanded(
+                          child: Text(name,
+                              style: Theme.of(context).textTheme.bodyMedium)),
+                      Container(
+                          alignment: Alignment.bottomRight,
+                          child: Text(duration,
+                              style: Theme.of(context).textTheme.titleSmall))
+                    ])))));
   }
 }

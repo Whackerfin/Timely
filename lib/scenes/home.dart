@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:timely/colors.dart";
 import "package:timely/widgets/add_actions_button.dart";
-import "package:timely/widgets/buttons_row.dart";
 import "package:timely/widgets/clear_button.dart";
 import "package:timely/widgets/footer.dart";
 import "package:timely/widgets/header.dart";
@@ -13,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(body: Builder(builder: (context) {
       final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-      return Container(
+      return Ink(
           width: MediaQuery.sizeOf(context).width,
           padding: EdgeInsets.symmetric(horizontal: 40.0),
           decoration: isDarkMode
@@ -27,13 +26,15 @@ class HomeScreen extends StatelessWidget {
                   end: Alignment.bottomRight,
                 ))
               : null,
-          child: Column(children: <Widget>[
-            Header(),
-            ActionsList(),
-            ClearButton(),
-            AddActionsButton(),
-            Footer()
-          ]));
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Column(children: <Widget>[
+              Header(),
+              ActionsList(),
+              ClearButton(),
+              AddActionsButton(),
+              Footer(),
+            ]);
+          }));
     }));
   }
 }
