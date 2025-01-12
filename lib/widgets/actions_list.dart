@@ -16,30 +16,6 @@ class ActionsList extends StatelessWidget {
                         name: "Breakfast",
                         duration: "15mins",
                         icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
-                    ActionCard(
-                        name: "Breakfast",
-                        duration: "15mins",
-                        icon: Icons.local_pizza),
                   ],
                 ))));
   }

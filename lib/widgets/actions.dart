@@ -13,26 +13,52 @@ class ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-    return InkWell(
-        borderRadius: BorderRadius.circular(12.0),
-        highlightColor: isLight ? accentColorLight : accentColorDark,
-        onTap: () {},
-        child: SizedBox(
-            height: 100,
-            child: Card.outlined(
-                color: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    side: BorderSide(
-                      color: isLight ? actionOutlineLight : actionOutlineDark,
-                    )),
-                elevation: 1.0,
+    return SizedBox(
+        height: 100,
+        child: Card.outlined(
+            color: Theme.of(context).colorScheme.primary,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                side: BorderSide(
+                  color: isLight ? actionOutlineLight : actionOutlineDark,
+                )),
+            elevation: 1.0,
+            child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0))),
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.pressed)) {
+                        if (isLight) {
+                          return Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withAlpha(200);
+                        } else {
+                          return Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withAlpha(60);
+                        }
+                      }
+                      return Theme.of(context)
+                          .colorScheme
+                          .primary; // Use the component's default.
+                    },
+                  ),
+                ),
+                onPressed: () {},
                 child: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Row(children: [
                       Container(
                           margin: EdgeInsets.only(right: 12.0),
-                          child: Icon(icon)),
+                          child: Icon(
+                            icon,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          )),
                       Expanded(
                           child: Text(name,
                               style: Theme.of(context).textTheme.bodyMedium)),

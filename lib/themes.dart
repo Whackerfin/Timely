@@ -53,6 +53,12 @@ final ThemeData myThemeLight = ThemeData(
           fontWeight: FontWeight.bold,
           color: onSurfaceColorLight,
         ),
+        //For text in add actions
+        titleLarge: GoogleFonts.amaticSc(
+          fontSize: 32,
+          fontWeight: FontWeight.normal,
+          color: onSecondaryColorLight,
+        ),
 //For Add action
         titleMedium: GoogleFonts.amaticSc(
           fontSize: 32,
@@ -134,6 +140,12 @@ final ThemeData myThemeDark = ThemeData(
           fontSize: 36,
           fontWeight: FontWeight.normal,
           color: onSurfaceColorDark,
+        ),
+        //For text in add actions
+        titleLarge: GoogleFonts.amaticSc(
+          fontSize: 32,
+          fontWeight: FontWeight.normal,
+          color: onSecondaryColorDark,
         ),
         //For durations Text
         titleSmall: GoogleFonts.amaticSc(
