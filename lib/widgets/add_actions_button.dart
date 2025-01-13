@@ -36,7 +36,7 @@ class _AddActionsState extends State<AddActionsButton> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 400),
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           SizedBox(
@@ -77,7 +77,7 @@ class _AddActionsState extends State<AddActionsButton> with SingleTickerProvider
                     ),
                     AnimatedRotation(
                       turns: _isPressed ? 0.5 : 0.0,
-                      duration: Duration(milliseconds: 300),
+                      duration: Duration(milliseconds: 400),
                       curve: Curves.easeInOut,
                       child: Icon(
                         Icons.keyboard_arrow_up,
