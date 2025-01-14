@@ -1,7 +1,33 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:timely/models/actionmodel.dart";
+import "package:timely/providers/actions_provider.dart";
 
-class ActionsForm extends StatelessWidget {
-  const ActionsForm({super.key});
+class ActionForm extends StatefulWidget {
+  const ActionForm({super.key, required this.collapse});
+  final VoidCallback collapse;
+  @override
+  State<ActionForm> createState() => _ActionFormState();
+}
+
+class _ActionFormState extends State<ActionForm> {
+  final namefieldText = TextEditingController();
+  final timefieldText = TextEditingController();
+  final iconfieldText = TextEditingController();
+  String name = "";
+  String duration = "";
+  String icon = "";
+  void clearText() {
+    namefieldText.clear();
+    iconfieldText.clear();
+    timefieldText.clear();
+    setState(() {
+      name = "";
+      duration = "";
+      icon = "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,23 +46,135 @@ class ActionsForm extends StatelessWidget {
                 Expanded(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Title",
-                        style: Theme.of(context).textTheme.titleLarge),
-                    Text("Icon", style: Theme.of(context).textTheme.titleLarge),
-                    Text("Duration",
-                        style: Theme.of(context).textTheme.titleLarge),
+                    Row(children: [
+                      Text("Title",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                          child: TextField(
+                        controller: namefieldText,
+                        onChanged: (text) {
+                          setState(() {
+                            name = text;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          maintainHintHeight: true,
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      )),
+                    ]),
+                    SizedBox(height: 10.0),
+                    Row(children: [
+                      Text("Icon",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                          child: TextField(
+                        controller: iconfieldText,
+                        onChanged: (text) {
+                          setState(() {
+                            icon = text;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          maintainHintHeight: true,
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      )),
+                    ]),
+                    SizedBox(height: 10.0),
+                    Row(children: [
+                      Text("Duration",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                          child: TextField(
+                        controller: timefieldText,
+                        onChanged: (text) {
+                          setState(() {
+                            duration = text;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          maintainHintHeight: true,
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      )),
+                    ]),
                   ],
                 )),
-                Container(
-                    height: 129,
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    alignment: Alignment.bottomCenter,
-                    child: Icon(
-                      size: 32,
-                      Icons.add,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ))
+                Column(mainAxisSize: MainAxisSize.max, children: [
+                  Container(
+                      height: 180,
+                      constraints: BoxConstraints(minWidth: 40.0),
+                      padding: EdgeInsets.only(left: 20.0, bottom: 0.0),
+                      alignment: Alignment.bottomCenter,
+                      child: IconButton(
+                          style: ButtonStyle(
+                            shape:
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12.0),
+                                  topRight: Radius.circular(12.0),
+                                  bottomLeft: Radius.circular(12.0),
+                                  bottomRight: Radius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                            backgroundColor:
+                                WidgetStateProperty.resolveWith<Color?>(
+                              (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.pressed)) {
+                                  return Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withAlpha(180);
+                                }
+                                return Theme.of(context).colorScheme.secondary;
+                              },
+                            ),
+                          ),
+                          onPressed: () {
+                            if (name != "" && icon != "" && duration != "") {
+                              ActionModel model1 = ActionModel(
+                                  name: name,
+                                  icon: Icons.local_pizza,
+                                  duration: duration);
+                              Provider.of<ActionProvider>(context,
+                                      listen: false)
+                                  .add(model1);
+                              widget.collapse();
+                              clearText();
+                            }
+                          },
+                          icon: Icon(
+                            size: 32,
+                            Icons.add,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          )))
+                ])
               ]))
         ]));
   }

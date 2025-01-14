@@ -7,17 +7,16 @@ class AddActionsButton extends StatefulWidget {
   State<AddActionsButton> createState() => _AddActionsState();
 }
 
-class _AddActionsState extends State<AddActionsButton> with SingleTickerProviderStateMixin {
+class _AddActionsState extends State<AddActionsButton>
+    with SingleTickerProviderStateMixin {
   bool _isPressed = false;
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: Duration(milliseconds: 400),
-      vsync: this
-    );
+    _controller =
+        AnimationController(duration: Duration(milliseconds: 400), vsync: this);
   }
 
   @override
@@ -93,10 +92,11 @@ class _AddActionsState extends State<AddActionsButton> with SingleTickerProvider
             builder: (context, child) {
               return ClipRect(
                 child: Align(
-                  alignment: Alignment.topCenter,
-                  heightFactor: _controller.value,
-                  child: ActionsForm()
-                ),
+                    alignment: Alignment.topCenter,
+                    heightFactor: _controller.value,
+                    child: ActionForm(
+                      collapse: press,
+                    )),
               );
             },
           ),
