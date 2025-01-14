@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:timely/providers/actions_provider.dart";
 
 class ClearButton extends StatelessWidget {
   const ClearButton({super.key});
@@ -24,7 +26,10 @@ class ClearButton extends StatelessWidget {
                     },
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<ActionProvider>(context, listen: false)
+                      .removeAll();
+                },
                 child: Text("CLEAR",
                     style: Theme.of(context).textTheme.bodySmall))));
   }

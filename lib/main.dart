@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import "package:timely/providers/actions_provider.dart";
 import "package:timely/scenes/home.dart";
 import "package:timely/themes.dart";
+import "package:provider/provider.dart";
 
 void main() {
-  runApp(const MainApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ActionProvider(), child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
