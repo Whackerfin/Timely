@@ -39,143 +39,144 @@ class _ActionFormState extends State<ActionForm> {
                 topRight: Radius.zero,
                 bottomRight: Radius.circular(12.0),
                 bottomLeft: Radius.circular(12.0))),
-        child: Column(children: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 26.0),
-              child: Row(children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children: [
-                      Text("Title",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      SizedBox(width: 10.0),
-                      Expanded(
-                          child: TextField(
-                        controller: namefieldText,
-                        onChanged: (text) {
-                          setState(() {
-                            name = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          maintainHintHeight: true,
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                        ),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      )),
-                    ]),
-                    SizedBox(height: 10.0),
-                    Row(children: [
-                      Text("Icon",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      SizedBox(width: 10.0),
-                      Expanded(
-                          child: TextField(
-                        controller: iconfieldText,
-                        onChanged: (text) {
-                          setState(() {
-                            icon = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          maintainHintHeight: true,
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                        ),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      )),
-                    ]),
-                    SizedBox(height: 10.0),
-                    Row(children: [
-                      Text("Duration",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      SizedBox(width: 10.0),
-                      Expanded(
-                          child: TextField(
-                        controller: timefieldText,
-                        onChanged: (text) {
-                          setState(() {
-                            duration = text;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          maintainHintHeight: true,
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                          border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: 1, color: Colors.black)),
-                        ),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      )),
-                    ]),
-                  ],
-                )),
-                Column(mainAxisSize: MainAxisSize.max, children: [
-                  Container(
-                      height: 180,
-                      constraints: BoxConstraints(minWidth: 40.0),
-                      padding: EdgeInsets.only(left: 20.0, bottom: 0.0),
-                      alignment: Alignment.bottomCenter,
-                      child: IconButton(
-                          style: ButtonStyle(
-                            shape:
-                                WidgetStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(12.0),
-                                  topRight: Radius.circular(12.0),
-                                  bottomLeft: Radius.circular(12.0),
-                                  bottomRight: Radius.circular(12.0),
-                                ),
-                              ),
-                            ),
-                            backgroundColor:
-                                WidgetStateProperty.resolveWith<Color?>(
-                              (Set<WidgetState> states) {
-                                if (states.contains(WidgetState.pressed)) {
-                                  return Theme.of(context)
-                                      .colorScheme
-                                      .secondary
-                                      .withAlpha(180);
-                                }
-                                return Theme.of(context).colorScheme.secondary;
-                              },
+        child: Stack(children: [
+          Column(children: [
+            Container(
+                padding: EdgeInsets.only(left: 26.0, right: 80.0),
+                child: Row(children: [
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        Text("Title",
+                            style: Theme.of(context).textTheme.titleLarge),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                            child: TextField(
+                          controller: namefieldText,
+                          onChanged: (text) {
+                            setState(() {
+                              name = text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            maintainHintHeight: true,
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                          ),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ]),
+                      SizedBox(height: 10.0),
+                      Row(children: [
+                        Text("Icon",
+                            style: Theme.of(context).textTheme.titleLarge),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                            child: TextField(
+                          controller: iconfieldText,
+                          onChanged: (text) {
+                            setState(() {
+                              icon = text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            maintainHintHeight: true,
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                          ),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ]),
+                      SizedBox(height: 10.0),
+                      Row(children: [
+                        Text("Duration",
+                            style: Theme.of(context).textTheme.titleLarge),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                            child: TextField(
+                          controller: timefieldText,
+                          onChanged: (text) {
+                            setState(() {
+                              duration = text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            maintainHintHeight: true,
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            border: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                          ),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        )),
+                      ]),
+                    ],
+                  )),
+                ]))
+          ]),
+          Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                  constraints: BoxConstraints(minWidth: 40.0),
+                  margin: EdgeInsets.only(right: 20.0),
+                  padding: EdgeInsets.only(left: 20.0, bottom: 0.0),
+                  alignment: Alignment.bottomCenter,
+                  child: IconButton(
+                      style: ButtonStyle(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12.0),
+                              topRight: Radius.circular(12.0),
+                              bottomLeft: Radius.circular(12.0),
+                              bottomRight: Radius.circular(12.0),
                             ),
                           ),
-                          onPressed: () {
-                            if (name != "" && icon != "" && duration != "") {
-                              ActionModel model1 = ActionModel(
-                                  name: name,
-                                  icon: Icons.local_pizza,
-                                  duration: duration);
-                              Provider.of<ActionProvider>(context,
-                                      listen: false)
-                                  .add(model1);
-                              widget.collapse();
-                              clearText();
+                        ),
+                        backgroundColor:
+                            WidgetStateProperty.resolveWith<Color?>(
+                          (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.pressed)) {
+                              return Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withAlpha(180);
                             }
+                            return Theme.of(context).colorScheme.secondary;
                           },
-                          icon: Icon(
-                            size: 32,
-                            Icons.add,
-                            color: Theme.of(context).colorScheme.onSecondary,
-                          )))
-                ])
-              ]))
+                        ),
+                      ),
+                      onPressed: () {
+                        if (name != "" && icon != "" && duration != "") {
+                          ActionModel model1 = ActionModel(
+                              name: name,
+                              icon: Icons.local_pizza,
+                              duration: duration);
+                          Provider.of<ActionProvider>(context, listen: false)
+                              .add(model1);
+                          widget.collapse();
+                          clearText();
+                        }
+                      },
+                      icon: Icon(
+                        size: 32,
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ))))
         ]));
   }
 }
