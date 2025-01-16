@@ -54,9 +54,10 @@ class ActionCard extends StatelessWidget {
                     padding: EdgeInsets.all(16.0),
                     child: Row(children: [
                       Container(
-                          margin: EdgeInsets.only(right: 12.0),
+                          margin: EdgeInsets.only(right: 32.0),
                           child: Icon(
                             icon,
+                            size: 32,
                             color: Theme.of(context).colorScheme.onPrimary,
                           )),
                       Expanded(

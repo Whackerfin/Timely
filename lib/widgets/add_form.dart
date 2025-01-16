@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:day_night_time_picker/day_night_time_picker.dart';
 import "package:provider/provider.dart";
 import "package:timely/models/actionmodel.dart";
 import "package:timely/providers/actions_provider.dart";
@@ -17,6 +18,25 @@ class _ActionFormState extends State<ActionForm> {
   String name = "";
   String duration = "";
   String icon = "";
+  Time _time = Time(hour: 0, minute: 30);
+  void _showTimePicker() {
+    Navigator.of(context).push(showPicker(
+        value: _time,
+        blurredBackground: true,
+        onChange: onTimeChange,
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        is24HrFormat: false,
+        accentColor: Theme.of(context).colorScheme.onSecondary));
+  }
+
+  void onTimeChange(Time time) {
+    setState(() {
+      _time = time;
+      timefieldText.text = _time.format(context);
+    });
+  }
+
   void clearText() {
     namefieldText.clear();
     iconfieldText.clear();
@@ -26,6 +46,42 @@ class _ActionFormState extends State<ActionForm> {
       duration = "";
       icon = "";
     });
+  }
+
+  bool isIconUnicode(String input) {
+    if (input.isEmpty) {
+      return false;
+    }
+    var codePoints = input.runes;
+    for (var codePoint in codePoints) {
+      if (codePoint >= 0x1F600 && codePoint <= 0x1F64F) {
+        // Unicode range for emoticons
+        return true;
+      } else if (codePoint >= 0x1F300 && codePoint <= 0x1F5FF) {
+        // Unicode range for Miscellaneous Symbols and Pictographs
+        return true;
+      } else if (codePoint >= 0x1F680 && codePoint <= 0x1F6FF) {
+        // Unicode range for Transport and Map Symbols
+        return true;
+      } else if (codePoint >= 0x1F700 && codePoint <= 0x1F77F) {
+        // Unicode range for Alchemical Symbols return true;
+      } else if (codePoint >= 0x1F780 && codePoint <= 0x1F7FF) {
+        // Unicode range for Geometric Shapes Extended
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool verify() {
+    if (!isIconUnicode(icon)) {
+      return false;
+    }
+    if (name == "") {
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -105,6 +161,7 @@ class _ActionFormState extends State<ActionForm> {
                         SizedBox(width: 10.0),
                         Expanded(
                             child: TextField(
+                          onTap: _showTimePicker,
                           controller: timefieldText,
                           onChanged: (text) {
                             setState(() {
@@ -161,10 +218,12 @@ class _ActionFormState extends State<ActionForm> {
                         ),
                       ),
                       onPressed: () {
-                        if (name != "" && icon != "" && duration != "") {
+                        if (verify()) {
+                          int unicode = icon.runes.first;
                           ActionModel model1 = ActionModel(
                               name: name,
-                              icon: Icons.local_pizza,
+                              icon: IconData(unicode,
+                                  fontFamily: "MaterialIcons"),
                               duration: duration);
                           Provider.of<ActionProvider>(context, listen: false)
                               .add(model1);
