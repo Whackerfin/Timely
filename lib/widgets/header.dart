@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:timely/providers/actions_provider.dart";
 
 class Header extends StatelessWidget {
   const Header({super.key});
@@ -10,7 +12,10 @@ class Header extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall),
       SizedBox(height: 25),
       //Temporary for now
-      Text("6:00 AM", style: Theme.of(context).textTheme.displayLarge)
+      Consumer<ActionProvider>(builder: (context, actions, child) {
+        String currTime = actions.getTime();
+        return Text(currTime, style: Theme.of(context).textTheme.displayLarge);
+      })
     ]));
   }
 }

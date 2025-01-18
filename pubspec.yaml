@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
+  intl: ^0.20.1
   provider: ^6.1.2
   wheel_picker: ^0.2.1
 

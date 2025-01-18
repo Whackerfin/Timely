@@ -29,6 +29,8 @@ class ClearButton extends StatelessWidget {
                 onPressed: () {
                   Provider.of<ActionProvider>(context, listen: false)
                       .removeAll();
+                  Provider.of<ActionProvider>(context, listen: false)
+                      .setTotalTime(clear: true);
                 },
                 child: Text("CLEAR",
                     style: Theme.of(context).textTheme.bodySmall))));

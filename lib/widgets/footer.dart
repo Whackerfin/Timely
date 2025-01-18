@@ -1,5 +1,7 @@
 import "package:day_night_time_picker/day_night_time_picker.dart";
 import "package:flutter/material.dart";
+import "package:timely/providers/actions_provider.dart";
+import "package:provider/provider.dart";
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -21,15 +23,22 @@ class _FooterState extends State<Footer> {
         accentColor: Theme.of(context).colorScheme.onSecondary));
   }
 
+  void setTime() {
+    Provider.of<ActionProvider>(context, listen: false)
+        .setReadyTime(_time.format(context));
+  }
+
   void onTimeChange(Time time) {
     setState(() {
       _time = time;
+      setTime();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     timefieldText.text = _time.format(context);
+    setTime();
     return Container(
         padding: EdgeInsets.only(bottom: 8.0),
         child: Row(

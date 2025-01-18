@@ -21,23 +21,29 @@ class _ActionFormState extends State<ActionForm> {
   String duration = "";
   String icon = "";
   int _hours = 0;
-  int _mins = 0;
+  int _mins = 5;
   late final _hoursWheel = WheelPickerController(
     itemCount: 13,
     initialIndex: _hours % 12,
   );
   late final _minsWheel = WheelPickerController(
       itemCount: 60, initialIndex: _mins, mounts: [_hoursWheel]);
+
+  int findTotalTime() {
+    final hrs = _hours * 60;
+    return hrs + _mins;
+  }
+
   void setTime(hours, mins) {
     String time = "";
     if (hours != 0) {
       time = "$hours" "hrs ";
     }
     if (mins != 0) {
-      time += "$mins" "mins";
+      time += "$mins" "min";
     }
     if (hours == 0 && mins == 0) {
-      time = "--";
+      time = "";
     }
     setState(() {
       duration = time;
@@ -228,10 +234,7 @@ class _ActionFormState extends State<ActionForm> {
   }
 
   bool verify() {
-    if (!isIconUnicode(icon)) {
-      return false;
-    }
-    if (name == "") {
+    if (name == "" || duration == "") {
       return false;
     }
     return true;
@@ -272,6 +275,7 @@ class _ActionFormState extends State<ActionForm> {
       return Text("$index".padLeft(2, '0'), style: textStyle);
     }
 
+    setTime(_hours, _mins);
     final timeWheels = <Widget>[
       Expanded(
         child: WheelPicker(
@@ -297,7 +301,7 @@ class _ActionFormState extends State<ActionForm> {
       ),
       Align(
         alignment: Alignment.center,
-        child: Text("mins", style: textStyle),
+        child: Text("min", style: textStyle),
       ),
     ];
 
@@ -434,11 +438,15 @@ class _ActionFormState extends State<ActionForm> {
                           int unicode = icon.runes.first;
                           ActionModel model1 = ActionModel(
                               name: name,
-                              icon: IconData(unicode,
-                                  fontFamily: "MaterialIcons"),
+                              icon: isIconUnicode(icon)
+                                  ? IconData(unicode,
+                                      fontFamily: "MaterialIcons")
+                                  : Icons.timer,
                               duration: duration);
                           Provider.of<ActionProvider>(context, listen: false)
                               .add(model1);
+                          Provider.of<ActionProvider>(context, listen: false)
+                              .increaseTime(findTotalTime());
                           widget.collapse();
                           clearText();
                         }
