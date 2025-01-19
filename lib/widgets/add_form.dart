@@ -1,5 +1,5 @@
 import "dart:ui";
-
+import "package:timely/colors.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import 'package:wheel_picker/wheel_picker.dart';
@@ -7,8 +7,9 @@ import "package:timely/models/actionmodel.dart";
 import "package:timely/providers/actions_provider.dart";
 
 class ActionForm extends StatefulWidget {
-  const ActionForm({super.key, required this.collapse});
+  const ActionForm({super.key, required this.collapse,required this.shake});
   final VoidCallback collapse;
+  final VoidCallback shake;
   @override
   State<ActionForm> createState() => _ActionFormState();
 }
@@ -17,6 +18,8 @@ class _ActionFormState extends State<ActionForm> {
   final namefieldText = TextEditingController();
   final timefieldText = TextEditingController();
   final iconfieldText = TextEditingController();
+  final namefocusnode = FocusNode();
+  final iconfocusnode = FocusNode();
   String name = "";
   String duration = "";
   String icon = "";
@@ -243,6 +246,11 @@ class _ActionFormState extends State<ActionForm> {
   @override
   void dispose() {
     // Don't forget to dispose the controllers at the end.
+    namefieldText.dispose();
+    iconfieldText.dispose();
+    timefieldText.dispose();
+    namefocusnode.dispose();
+    iconfocusnode.dispose();
     _hoursWheel.dispose();
     _minsWheel.dispose();
     super.dispose();
@@ -275,7 +283,9 @@ class _ActionFormState extends State<ActionForm> {
       return Text("$index".padLeft(2, '0'), style: textStyle);
     }
 
-    setTime(_hours, _mins);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setTime(_hours, _mins);
+    });
     final timeWheels = <Widget>[
       Expanded(
         child: WheelPicker(
@@ -329,7 +339,12 @@ class _ActionFormState extends State<ActionForm> {
                             style: Theme.of(context).textTheme.titleLarge),
                         SizedBox(width: 10.0),
                         Expanded(
-                            child: TextField(
+                            child: TextFormField(
+                          focusNode: namefocusnode,
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(namefocusnode);
+                            iconfocusnode.unfocus();
+                          },
                           controller: namefieldText,
                           onChanged: (text) {
                             setState(() {
@@ -354,7 +369,12 @@ class _ActionFormState extends State<ActionForm> {
                             style: Theme.of(context).textTheme.titleLarge),
                         SizedBox(width: 10.0),
                         Expanded(
-                            child: TextField(
+                            child: TextFormField(
+                          focusNode: iconfocusnode,
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(iconfocusnode);
+                            namefocusnode.unfocus();
+                          },
                           controller: iconfieldText,
                           onChanged: (text) {
                             setState(() {
@@ -373,29 +393,39 @@ class _ActionFormState extends State<ActionForm> {
                           style: Theme.of(context).textTheme.titleLarge,
                         )),
                       ]),
-                      SizedBox(height: 10.0),
-                      Row(children: [
-                        Text("Duration",
-                            style: Theme.of(context).textTheme.titleLarge),
-                        SizedBox(width: 10.0),
-                        Expanded(
-                            child: TextField(
-                          controller: timefieldText,
-                          onTap: () {
-                            showOverlay(context, timeWheels);
-                          },
-                          decoration: InputDecoration(
-                            maintainHintHeight: true,
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 1, color: Colors.black)),
-                            border: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 1, color: Colors.black)),
+                      SizedBox(height: 20.0),
+                      Row(
+                        children: [
+                          Text("Duration",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          SizedBox(width: 10.0),
+                          Expanded(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1.0,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.dark
+                                                    ? underlineColorLight
+                                                    : underlineColorDark))),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showOverlay(context, timeWheels);
+                                  },
+                                  child: Text(
+                                    timefieldText.text.isEmpty
+                                        ? "Select Duration"
+                                        : timefieldText.text,
+                                    style:
+                                        Theme.of(context).textTheme.titleLarge,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                )),
                           ),
-                          style: Theme.of(context).textTheme.titleLarge,
-                        )),
-                      ]),
+                        ],
+                      )
                     ],
                   )),
                 ]))
@@ -435,7 +465,9 @@ class _ActionFormState extends State<ActionForm> {
                       ),
                       onPressed: () {
                         if (verify()) {
-                          int unicode = icon.runes.first;
+                          int unicode = icon.isNotEmpty
+                              ? icon.runes.first
+                              : Icons.timer.codePoint;
                           ActionModel model1 = ActionModel(
                               name: name,
                               icon: isIconUnicode(icon)
@@ -449,6 +481,9 @@ class _ActionFormState extends State<ActionForm> {
                               .increaseTime(findTotalTime());
                           widget.collapse();
                           clearText();
+                        }
+                        else{
+                        widget.shake();
                         }
                       },
                       icon: Icon(
