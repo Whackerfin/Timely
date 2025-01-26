@@ -3,10 +3,12 @@ import "package:timely/providers/actions_provider.dart";
 import "package:timely/scenes/home.dart";
 import "package:timely/themes.dart";
 import "package:provider/provider.dart";
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-      create: (context) => ActionProvider(), child: const MainApp()));
+      create: (context) => ActionProvider()..initialize(),
+      child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {

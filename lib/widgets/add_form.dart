@@ -1,13 +1,15 @@
 import "dart:ui";
+import 'package:uuid/uuid.dart';
 import "package:timely/colors.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:uuid/v4.dart";
 import 'package:wheel_picker/wheel_picker.dart';
 import "package:timely/models/actionmodel.dart";
 import "package:timely/providers/actions_provider.dart";
 
 class ActionForm extends StatefulWidget {
-  const ActionForm({super.key, required this.collapse,required this.shake});
+  const ActionForm({super.key, required this.collapse, required this.shake});
   final VoidCallback collapse;
   final VoidCallback shake;
   @override
@@ -472,18 +474,20 @@ class _ActionFormState extends State<ActionForm> {
                               name: name,
                               icon: isIconUnicode(icon)
                                   ? IconData(unicode,
-                                      fontFamily: "MaterialIcons")
-                                  : Icons.timer,
-                              duration: duration);
+                                      fontFamily: 'MaterialIcons')
+                                  : IconData(Icons.timer.codePoint,
+                                      fontFamily: 'MaterialIcons'),
+                              duration: duration,
+                              id: Uuid().v4(),
+                              mins: (60 * _hours + _mins));
                           Provider.of<ActionProvider>(context, listen: false)
                               .add(model1);
                           Provider.of<ActionProvider>(context, listen: false)
                               .increaseTime(findTotalTime());
                           widget.collapse();
                           clearText();
-                        }
-                        else{
-                        widget.shake();
+                        } else {
+                          widget.shake();
                         }
                       },
                       icon: Icon(
