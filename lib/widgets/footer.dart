@@ -2,6 +2,7 @@ import "package:day_night_time_picker/day_night_time_picker.dart";
 import "package:flutter/material.dart";
 import "package:timely/providers/actions_provider.dart";
 import "package:provider/provider.dart";
+import "package:timely/services/database_services.dart";
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -11,6 +12,7 @@ class Footer extends StatefulWidget {
 }
 
 class _FooterState extends State<Footer> {
+  final DatabaseService _databaseService = DatabaseService.instance;
   Time _time = Time(hour: 8, minute: 30);
   final timefieldText = TextEditingController();
   bool _isInitialized = false;
@@ -19,9 +21,17 @@ class _FooterState extends State<Footer> {
   void initState() {
     super.initState();
     // Schedule the initial time set for after the first build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final time = await _databaseService.getReadyTime();
       if (!_isInitialized) {
         setTime();
+        if (time != null) {
+          setState(() {
+            _time = Time(hour: time[0], minute: time[1]);
+          });
+        }
+
+        setTime(); // Set the ready time
         _isInitialized = true;
       }
     });
@@ -46,6 +56,8 @@ class _FooterState extends State<Footer> {
 
   void onTimeChange(Time time) {
     setState(() {
+      String mode = time.hour < 12 ? "AM" : "PM";
+      _databaseService.updateReadyTime(time.hour, time.minute, mode);
       _time = time;
       // It's safe to call setTime here because we're in a callback
       setTime();

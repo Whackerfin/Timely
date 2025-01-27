@@ -80,8 +80,19 @@ class ActionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateTotalMins() {
+    int sumTime = 0;
+    for (int i = 0; i < actions.length; i++) {
+      final action = actions[i];
+      sumTime += action.mins;
+    }
+    _totalmins = sumTime;
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     _actions = await _databaseService.getActions();
+    updateTotalMins();
     print("Initialized");
   }
 

@@ -21,64 +21,81 @@ class _ActionsListState extends State<ActionsList> {
 
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: Expanded(
-        child: Ink(
-          padding: EdgeInsets.only(top: 67.0, bottom: 10.0),
-          child: Consumer<ActionProvider>(
-            builder: (context, actionslist, child) {
-              return actionslist.actions.isNotEmpty
-                  ? AnimatedReorderableListView(
-                      items: actionslist.actions,
-                      itemBuilder: (BuildContext context, int index) {
-                        // Render each item as an `ActionCard`
-                        final ActionModel model = actionslist.actions[index];
-                        return Dismissible(
-                            key: ValueKey(model.id),
-                            direction: DismissDirection.startToEnd,
-                            background: Container(
-                              color: Colors.red,
-                              alignment: Alignment.centerRight,
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Icon(Icons.delete, color: Colors.white),
-                            ),
-                            onDismissed: (direction) {
-                              Provider.of<ActionProvider>(context,
-                                      listen: false)
-                                  .removeAt(index);
+    return FutureBuilder(
+        future:
+            Provider.of<ActionProvider>(context, listen: false).initialize(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(
+                child: Text("Error Loading  actions: ${snapshot.error}"));
+          }
+
+          return ScrollConfiguration(
+            behavior:
+                ScrollConfiguration.of(context).copyWith(scrollbars: false),
+            child: Expanded(
+              child: Ink(
+                padding: EdgeInsets.only(top: 67.0, bottom: 10.0),
+                child: Consumer<ActionProvider>(
+                  builder: (context, actionslist, child) {
+                    return actionslist.actions.isNotEmpty
+                        ? AnimatedReorderableListView(
+                            items: actionslist.actions,
+                            itemBuilder: (BuildContext context, int index) {
+                              // Render each item as an `ActionCard`
+                              final ActionModel model =
+                                  actionslist.actions[index];
+                              return Dismissible(
+                                  key: ValueKey(model.id),
+                                  direction: DismissDirection.startToEnd,
+                                  background: Container(
+                                    color: Colors.red,
+                                    alignment: Alignment.centerRight,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child:
+                                        Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                  onDismissed: (direction) {
+                                    Provider.of<ActionProvider>(context,
+                                            listen: false)
+                                        .removeAt(index);
+                                  },
+                                  child: ActionCard(
+                                      name: model.name,
+                                      duration: model.duration,
+                                      icon: model.icon,
+                                      id: model.id,
+                                      key: ValueKey(model.id),
+                                      mins: model.mins));
                             },
-                            child: ActionCard(
-                                name: model.name,
-                                duration: model.duration,
-                                icon: model.icon,
-                                id: model.id,
-                                key: ValueKey(model.id),
-                                mins: model.mins));
-                      },
-                      enterTransition: [SlideInRight()],
-                      exitTransition: [SlideInLeft()],
-                      insertDuration: const Duration(milliseconds: 300),
-                      removeDuration: const Duration(milliseconds: 300),
-                      dragStartDelay: const Duration(milliseconds: 300),
-                      onReorder: (int oldIndex, int newIndex) async {
-                        if (oldIndex != newIndex) {
-                          // Update the list order in the provider
-                          final movedItem = actionslist.actions[oldIndex];
-                          actionslist.actions.removeAt(oldIndex);
-                          actionslist.actions.insert(newIndex, movedItem);
-                          await actionslist.updateOrderInDatabase();
-                        }
-                      },
-                      isSameItem: (a, b) => a.id == b.id,
-                    )
-                  : Center(
-                      child: Text("Add some actions!!!"),
-                    );
-            },
-          ),
-        ),
-      ),
-    );
+                            enterTransition: [SlideInRight()],
+                            exitTransition: [SlideInLeft()],
+                            insertDuration: const Duration(milliseconds: 300),
+                            removeDuration: const Duration(milliseconds: 300),
+                            dragStartDelay: const Duration(milliseconds: 300),
+                            onReorder: (int oldIndex, int newIndex) async {
+                              if (oldIndex != newIndex) {
+                                // Update the list order in the provider
+                                final movedItem = actionslist.actions[oldIndex];
+                                actionslist.actions.removeAt(oldIndex);
+                                actionslist.actions.insert(newIndex, movedItem);
+                                await actionslist.updateOrderInDatabase();
+                              }
+                            },
+                            isSameItem: (a, b) => a.id == b.id,
+                          )
+                        : Center(
+                            child: Text("Add some actions!!!"),
+                          );
+                  },
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

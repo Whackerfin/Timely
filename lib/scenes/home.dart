@@ -14,29 +14,39 @@ class HomeScreen extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         body: Builder(builder: (context) {
           final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-          return Ink(
-              width: MediaQuery.sizeOf(context).width,
-              padding: EdgeInsets.symmetric(horizontal: 40.0),
-              decoration: isDarkMode
-                  ? BoxDecoration(
-                      gradient: LinearGradient(
-                      colors: [
-                        backgroundColorDarkStart, // Start color (you can adjust this based on your theme)
-                        backgroundColorDarkEnd, // End color (adjust as needed)
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ))
-                  : null,
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Column(children: <Widget>[
+          return Stack(children: [
+            Ink(
+                width: MediaQuery.sizeOf(context).width,
+                padding: EdgeInsets.symmetric(horizontal: 40.0),
+                decoration: isDarkMode
+                    ? BoxDecoration(
+                        gradient: LinearGradient(
+                        colors: [
+                          backgroundColorDarkStart, // Start color (you can adjust this based on your theme)
+                          backgroundColorDarkEnd, // End color (adjust as needed)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ))
+                    : null,
+                child: Column(children: <Widget>[
                   Header(),
                   ActionsList(),
-                  ClearButton(),
-                  AddActionsButton(),
+                  SizedBox(
+                    height: 73,
+                  ),
                   Footer(),
-                ]);
-              }));
+                ])),
+            Positioned(
+                left: 40,
+                right: 40,
+                bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                    ? MediaQuery.of(context)
+                        .viewInsets
+                        .bottom // Adjust for keyboard
+                    : 60,
+                child: Column(children: [ClearButton(), AddActionsButton()]))
+          ]);
         }));
   }
 }

@@ -14,11 +14,26 @@ class DatabaseService {
   final String _durationColumnName = "duration";
   final String _iconColumnName = "icons";
   final String _orderColumnName = "action_order";
+  static Database? _rdb;
 
+  final int _readyId = 231;
+  final int initialHour = 8;
+  final int initialMin = 30;
+  final String initialMode = "AM";
+  final String _readyTimeTable = "readyTime";
+  final String _readyHourColumnName = "hour";
+  final String _readyMinsColumnName = "min";
+  final String _readyModeColumnName = "am";
   Future<Database> get database async {
     if (_db != null) return _db!;
     _db = await getDatabase();
     return _db!;
+  }
+
+  Future<Database> get readyBase async {
+    if (_rdb != null) return _rdb!;
+    _rdb = await getReadyBase();
+    return _rdb!;
   }
 
   Future<Database> getDatabase() async {
@@ -37,6 +52,32 @@ class DatabaseService {
   )
   ''');
       print("Table $_actionsTableName created successfully");
+    });
+
+    return database;
+  }
+
+  Future<Database> getReadyBase() async {
+    final databaseDirPath = await getDatabasesPath();
+    final databasePath = join(databaseDirPath, "slave_db.db");
+    final database =
+        openDatabase(databasePath, version: 1, onCreate: (db, version) async {
+      db.execute('''
+  CREATE TABLE $_readyTimeTable (
+   $_idColumnName INTEGER PRIMARY KEY ,
+   $_readyHourColumnName INTEGER NOT NULL,
+   $_readyMinsColumnName INTEGER NOT NULL,
+   $_readyModeColumnName TEXT NOT NULL,
+
+  )
+  ''');
+      print("Table $_readyTimeTable created successfully");
+      await db.insert(_readyTimeTable, {
+        _idColumnName: _readyId,
+        _readyHourColumnName: initialHour,
+        _readyMinsColumnName: initialMin,
+        _readyModeColumnName: initialMode
+      });
     });
 
     return database;
@@ -76,6 +117,25 @@ class DatabaseService {
       return model;
     }).toList();
     return actions;
+  }
+
+  Future<List<dynamic>?> getReadyTime() async {
+    final db = await getReadyBase();
+    final result = await db.query(
+      _readyTimeTable,
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final hour = result.first[_readyHourColumnName] as int;
+      final minute = result.first[_readyMinsColumnName] as int;
+      final mode = result.first[_readyModeColumnName] as String;
+
+      // Return the values as an array: [hour, minute, mode]
+      return [hour, minute, mode];
+    }
+
+    return null;
   }
 
   Future<void> deleteDatabaseIfNeeded() async {
@@ -139,6 +199,20 @@ class DatabaseService {
       {_orderColumnName: newOrder}, // Update the order column
       where: '$_idColumnName = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<void> updateReadyTime(int newHour, int newMin, String newMode) async {
+    final db = await readyBase;
+    await db.update(
+      _readyTimeTable,
+      {
+        _readyHourColumnName: newHour,
+        _readyMinsColumnName: newMin,
+        _readyModeColumnName: newMode
+      },
+      where: '$_idColumnName =?',
+      whereArgs: [_readyId],
     );
   }
 }
