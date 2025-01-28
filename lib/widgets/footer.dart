@@ -20,33 +20,46 @@ class _FooterState extends State<Footer> {
   @override
   void initState() {
     super.initState();
-    // Schedule the initial time set for after the first build
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final time = await _databaseService.getReadyTime();
-      if (!_isInitialized) {
-        setTime();
-        if (time != null) {
+      try {
+        final time = await _databaseService.getReadyTime();
+        if (!_isInitialized) {
           setState(() {
-            _time = Time(hour: time[0], minute: time[1]);
-          });
-        }
+            if (time != null) {
+              if (time[2] == "AM") {
+                int hour = time[0];
+                if (hour == 12) {
+                  hour = 0;
+                }
+                _time = Time(hour: hour, minute: time[1]);
+              } else {
+                _time = Time(hour: time[0] + 12, minute: time[1]);
+              }
 
-        setTime(); // Set the ready time
-        _isInitialized = true;
+              print(time[2]);
+            } else {
+              _time = Time(hour: 8, minute: 30); // Default time
+            }
+          });
+          setTime();
+          _isInitialized = true;
+        }
+      } catch (e) {
+        print("Error initializing ready time: $e");
       }
     });
   }
 
   void _showTimePicker() {
     Navigator.of(context).push(showPicker(
-      value: _time,
-      blurredBackground: true,
-      onChange: onTimeChange,
-      context: context,
-      backgroundColor: Theme.of(context).colorScheme.secondary,
-      is24HrFormat: false,
-      accentColor: Theme.of(context).colorScheme.onSecondary,
-    ));
+        value: _time,
+        blurredBackground: true,
+        onChange: onTimeChange,
+        context: context,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        is24HrFormat: false,
+        accentColor: Theme.of(context).colorScheme.onSecondary,
+        unselectedColor: Color(0xFFFFF9C4)));
   }
 
   void setTime() {
@@ -56,10 +69,15 @@ class _FooterState extends State<Footer> {
 
   void onTimeChange(Time time) {
     setState(() {
+      int hour = time.hour > 12
+          ? time.hour - 12
+          : time.hour == 0
+              ? 12
+              : time.hour;
       String mode = time.hour < 12 ? "AM" : "PM";
-      _databaseService.updateReadyTime(time.hour, time.minute, mode);
-      _time = time;
-      // It's safe to call setTime here because we're in a callback
+
+      _databaseService.updateReadyTime(hour, time.minute, mode);
+      _time = Time(hour: hour, minute: time.minute);
       setTime();
     });
   }
@@ -67,25 +85,26 @@ class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
     timefieldText.text = _time.format(context);
-    // Remove the setTime() call from here
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 8.0, left: 20.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          Expanded(
+              child: Text(
             "READY@",
             style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(width: 32.0),
-          TextButton(
-            onPressed: _showTimePicker,
-            child: Text(
-              _time.format(context),
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+          )),
+          Expanded(
+            flex: 2,
+            child: TextButton(
+                onPressed: _showTimePicker,
+                child: Text(
+                  _time.format(context),
+                  style: Theme.of(context).textTheme.displaySmall,
+                )),
           ),
         ],
       ),

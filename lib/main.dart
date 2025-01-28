@@ -17,6 +17,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: myThemeLight, darkTheme: myThemeDark, home: HomeScreen());
+        theme: myThemeLight,
+        darkTheme: myThemeDark,
+        home: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: HomeScreen()));
   }
 }

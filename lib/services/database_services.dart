@@ -67,7 +67,7 @@ class DatabaseService {
    $_idColumnName INTEGER PRIMARY KEY ,
    $_readyHourColumnName INTEGER NOT NULL,
    $_readyMinsColumnName INTEGER NOT NULL,
-   $_readyModeColumnName TEXT NOT NULL,
+   $_readyModeColumnName TEXT NOT NULL
 
   )
   ''');
@@ -140,7 +140,7 @@ class DatabaseService {
 
   Future<void> deleteDatabaseIfNeeded() async {
     final databaseDirPath = await getDatabasesPath();
-    final databasePath = join(databaseDirPath, "master_db.db");
+    final databasePath = join(databaseDirPath, "slave_db.db");
 
     // Delete the database if it exists (for testing purposes)
     if (await databaseExists(databasePath)) {

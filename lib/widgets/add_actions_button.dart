@@ -93,11 +93,14 @@ class _AddActionsState extends State<AddActionsButton>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "ADD AN ACTION ",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        AnimatedRotation(
+                        Expanded(
+                            flex: 5,
+                            child: Text(
+                              "ADD AN ACTION ",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            )),
+                        Expanded(
+                            child: AnimatedRotation(
                           turns: _isPressed ? 0.5 : 0.0,
                           duration: Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
@@ -106,7 +109,7 @@ class _AddActionsState extends State<AddActionsButton>
                             color: Theme.of(context).colorScheme.onSecondary,
                             size: 32.0,
                           ),
-                        ),
+                        )),
                       ],
                     ),
                   )),
