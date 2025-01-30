@@ -5,6 +5,7 @@ import "package:timely/widgets/clear_button.dart";
 import "package:timely/widgets/footer.dart";
 import "package:timely/widgets/header.dart";
 import "package:timely/widgets/actions_list.dart";
+import "package:timely/widgets/navbar.dart";
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -37,6 +38,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Footer(),
                 ])),
+            Positioned(child: NavBar()),
             Positioned(
                 left: 40,
                 right: 40,

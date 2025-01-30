@@ -8,9 +8,10 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      SizedBox(height: 50),
       Text("Hey Timely When Should  I Wake up",
           style: Theme.of(context).textTheme.headlineSmall),
-      SizedBox(height: 25),
+      SizedBox(height: 10),
       //Temporary for now
       Consumer<ActionProvider>(builder: (context, actions, child) {
         String currTime = actions.getTime();
