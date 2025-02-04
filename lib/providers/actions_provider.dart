@@ -62,8 +62,8 @@ class ActionProvider extends ChangeNotifier {
 
   void removeAt(int index) {
     _totalmins -= _actions[index].mins;
-    _databaseService.removeActionAtIndex(index);
     _actions.removeAt(index);
+    _databaseService.removeActionAtIndex(index);
     notifyListeners();
   }
 

@@ -60,9 +60,11 @@ class _ActionsListState extends State<ActionsList> {
                                         Icon(Icons.delete, color: Colors.white),
                                   ),
                                   onDismissed: (direction) {
-                                    Provider.of<ActionProvider>(context,
-                                            listen: false)
-                                        .removeAt(index);
+                                    setState(() {
+                                      Provider.of<ActionProvider>(context,
+                                              listen: false)
+                                          .removeAt(index);
+                                    });
                                   },
                                   child: ActionCard(
                                       name: model.name,

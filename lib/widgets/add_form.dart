@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 import "package:timely/colors.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
-import "package:uuid/v4.dart";
 import 'package:wheel_picker/wheel_picker.dart';
 import "package:timely/models/actionmodel.dart";
 import "package:timely/providers/actions_provider.dart";
@@ -356,6 +355,10 @@ class _ActionFormState extends State<ActionForm> {
                           decoration: InputDecoration(
                             maintainHintHeight: true,
                             enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            focusedBorder: UnderlineInputBorder(
+                                // Add this
                                 borderSide:
                                     BorderSide(width: 1, color: Colors.black)),
                             border: UnderlineInputBorder(
