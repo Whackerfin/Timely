@@ -1,7 +1,7 @@
 # Timely ⏰
 
 Timely is a simple app that helps you determine the best time to wake up based on a list of tasks you need to complete before a specific deadline. Just input your required actions, their durations, and the time you need to be ready, and Timely will calculate your optimal wake-up time.
-My first attempt at mobile app development and using flutter and decided on this is my first try learning mobile development and I made this simple app.s very simple app.
+My first attempt at mobile app development and using flutter and settled on a simple app.
 
 ---
 
